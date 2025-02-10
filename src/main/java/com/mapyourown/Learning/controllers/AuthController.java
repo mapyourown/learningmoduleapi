@@ -1,5 +1,6 @@
 package com.mapyourown.Learning.controllers;
 
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,10 +69,17 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+            String[] parts = jwt.split("\\.");
+
+            JSONObject header = new JSONObject(decode(parts[0]));
+            JSONObject payload = new JSONObject(decode(parts[1]));
+            String signature = decode(parts[2]);
+            long exp = payload.getLong("exp");
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
+                exp,
                 roles));
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -139,5 +148,9 @@ public class AuthController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return ResponseEntity.ok(new MessageResponse("User logout successfully!"));
+    }
+
+    private static String decode(String encodedString) {
+        return new String(Base64.getUrlDecoder().decode(encodedString));
     }
 }

@@ -5,6 +5,7 @@ import com.mapyourown.Learning.models.QuizAnswer;
 import com.mapyourown.Learning.models.QuizQuestion;
 import com.mapyourown.Learning.payload.request.QuizAnswerRequest;
 import com.mapyourown.Learning.payload.request.QuizQuestionRequest;
+import com.mapyourown.Learning.payload.request.QuizRequest;
 import com.mapyourown.Learning.repository.QuizAnswerRepository;
 import com.mapyourown.Learning.repository.QuizQuestionRepository;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -33,7 +35,7 @@ public class QuizAnswerController {
             //fetch quiz
             QuizQuestion quizQuestion = quizQuestionRepository.getReferenceById( quizAnswerRequest.getQuizQuestionId());
 
-            QuizAnswer quizAnswer = new QuizAnswer(quizAnswerRequest.getAnswerText(), quizAnswerRequest.isCorrect(), quizQuestion);
+            QuizAnswer quizAnswer = new QuizAnswer(quizAnswerRequest.getAnswerText(), quizAnswerRequest.getIsCorrect(), quizQuestion);
             QuizAnswer _newQuizAnswer= quizAnswerRepository.save(quizAnswer);
             return new ResponseEntity<>(_newQuizAnswer, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -59,6 +61,21 @@ public class QuizAnswerController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PutMapping("/quizAnswer/{id}")
+    public ResponseEntity<QuizAnswer> updateQuizAnswer(@PathVariable("id") long id, @RequestBody QuizAnswerRequest quizAnswerRequest) {
+        Optional<QuizAnswer> quizAnswerData = quizAnswerRepository.findById(id);
+        QuizQuestion quizQuestion = quizQuestionRepository.getReferenceById( quizAnswerRequest.getQuizQuestionId());
+
+        if (quizAnswerData.isPresent()) {
+            QuizAnswer _newQuizAnswer = quizAnswerData.get();
+            _newQuizAnswer.setAnswerText(quizAnswerRequest.getAnswerText());
+            _newQuizAnswer.setIsCorrect(quizAnswerRequest.getIsCorrect());
+            _newQuizAnswer.setQuizQuestion(quizQuestion);
+            return new ResponseEntity<>(quizAnswerRepository.save(_newQuizAnswer), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

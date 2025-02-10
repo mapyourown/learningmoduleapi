@@ -1,8 +1,10 @@
 package com.mapyourown.Learning.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "quiz_answer")
@@ -14,10 +16,10 @@ public class QuizAnswer {
     @Column(name = "answer_text")
     @NotBlank
     private String answerText;
-
+    @JsonProperty
     @Column(name = "is_correct")
     private boolean isCorrect;
-    @JsonIgnore
+   @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_question_id")
     private QuizQuestion quizQuestion;
@@ -46,12 +48,12 @@ public class QuizAnswer {
         this.answerText = answerText;
     }
 
-    public boolean isCorrect() {
-        return isCorrect;
+    public boolean getIsCorrect() {
+        return this.isCorrect;
     }
 
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
+    public void setIsCorrect(boolean isCorrect) {
+        this.isCorrect = isCorrect;
     }
 
     public QuizQuestion getQuizQuestion() {

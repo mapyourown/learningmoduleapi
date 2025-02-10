@@ -17,20 +17,25 @@ public class QuizQuestion {
     @Column(name = "question_title")
     @NotBlank
     private String questionTitle;
+
+    @Column (name="questionType")
+    private int questionType;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "quizQuestion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "quizQuestion", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<QuizAnswer> quizAnswers = new ArrayList<>();
 
     public QuizQuestion(){}
 
-    public QuizQuestion(String questionTitle, Quiz quiz){
+    public QuizQuestion(String questionTitle, int questionType,Quiz quiz){
         this.questionTitle = questionTitle;
+        this.questionType = questionType;
         this.quiz = quiz;
+
     }
 
     public Long getId() {
@@ -61,7 +66,18 @@ public class QuizQuestion {
         return quizAnswers;
     }
 
-    public void setQuizAnswers(List<QuizAnswer> quizAnswers) {
+    public void setQuizAnswers(List<QuizAnswer> quizAnswers)
+    {
         this.quizAnswers = quizAnswers;
+        for(QuizAnswer aw: quizAnswers){
+            aw.setQuizQuestion(this);
+        }
+    }
+    public int getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(int questionType) {
+        this.questionType = questionType;
     }
 }

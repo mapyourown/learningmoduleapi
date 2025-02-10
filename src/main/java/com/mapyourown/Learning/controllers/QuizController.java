@@ -1,22 +1,18 @@
 package com.mapyourown.Learning.controllers;
 
 import com.mapyourown.Learning.models.*;
+import com.mapyourown.Learning.payload.request.CourseRequest;
 import com.mapyourown.Learning.payload.request.ModuleRequest;
 import com.mapyourown.Learning.payload.request.QuizRequest;
 import com.mapyourown.Learning.payload.request.StudentQuizAttemptRequest;
-import com.mapyourown.Learning.repository.CourseRepository;
-import com.mapyourown.Learning.repository.QuizRepository;
-import com.mapyourown.Learning.repository.StudentQuizAttemptRepository;
-import com.mapyourown.Learning.repository.UserRepository;
+import com.mapyourown.Learning.repository.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -25,7 +21,7 @@ public class QuizController {
     QuizRepository quizRepository;
 
     @Autowired
-    CourseRepository courseRepository;
+    ModuleRepository moduleRepository;
     @Autowired
     UserRepository userRepository;
 
@@ -36,9 +32,9 @@ public class QuizController {
     public ResponseEntity<?> createQuiz(@Valid @RequestBody QuizRequest quizRequest) {
         try {
             //fetch course
-            Course course = courseRepository.getReferenceById( quizRequest.getCourseId());
+            CourseModule courseModule = moduleRepository.getReferenceById( quizRequest.getCourseModuleId());
 
-            Quiz quiz = new Quiz(quizRequest.getName(), quizRequest.getNumber(), quizRequest.getCourseOrder(), quizRequest.getMinPassScore(), quizRequest.isPassRequired(),course);
+            Quiz quiz = new Quiz(quizRequest.getName(), quizRequest.getNumber(), quizRequest.getCourseOrder(), quizRequest.getMinPassScore(), quizRequest.isPassRequired(),courseModule);
             Quiz _newQuiz= quizRepository.save(quiz);
             return new ResponseEntity<>(_newQuiz, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -50,10 +46,22 @@ public class QuizController {
     public ResponseEntity<List<Quiz>> getAllQuiz(){
         List<Quiz> quizzes = new ArrayList<>();
         quizRepository.findAll().forEach(quizzes::add);
+
         if (quizzes.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(quizzes, HttpStatus.OK);
+    }
+
+    @GetMapping("/quiz/{id}")
+    public ResponseEntity<Quiz> getSingleQuiz(@PathVariable("id") Long id){
+        Optional<Quiz> quizData = quizRepository.findById(id);
+
+        if (quizData.isPresent()) {
+            return new ResponseEntity<>(quizData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/quiz/{id}")
@@ -80,6 +88,23 @@ public class QuizController {
             return new ResponseEntity<>(_studentQuizAttempt, HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/quiz/{id}")
+    public ResponseEntity<Quiz> updateQuiz(@PathVariable("id") long id, @RequestBody QuizRequest quizRequest) {
+        Optional<Quiz> quizData = quizRepository.findById(id);
+
+        if (quizData.isPresent()) {
+            Quiz _newQuiz = quizData.get();
+            _newQuiz.setName(quizRequest.getName());
+            _newQuiz.setNumber(quizRequest.getNumber());
+            _newQuiz.setCourseOrder(quizRequest.getCourseOrder());
+            _newQuiz.setMinPassScore(quizRequest.getMinPassScore());
+            _newQuiz.setPassRequired(quizRequest.isPassRequired());
+            return new ResponseEntity<>(quizRepository.save(_newQuiz), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
     @GetMapping("/studentQuizAttempts")

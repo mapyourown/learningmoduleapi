@@ -41,9 +41,6 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseModule> courseModules = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Quiz> quizList = new ArrayList<>();
 
     public Course() {
 
@@ -124,14 +121,6 @@ public class Course {
         for(CourseModule m : courseModules) {
             m.setCourse(this);
         }
-    }
-
-    public List<Quiz> getQuizList() {
-        return quizList;
-    }
-
-    public void setQuizList(List<Quiz> quizList) {
-        this.quizList = quizList;
     }
 
     @Override

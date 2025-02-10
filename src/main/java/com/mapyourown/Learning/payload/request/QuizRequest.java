@@ -15,7 +15,7 @@ public class QuizRequest {
 
     private boolean isPassRequired;
 
-    private Long courseId;
+    private Long courseModuleId;
 
     public String getName() {
         return name;
@@ -57,11 +57,11 @@ public class QuizRequest {
         isPassRequired = passRequired;
     }
 
-    public Long getCourseId() {
-        return courseId;
+    public Long getCourseModuleId() {
+        return courseModuleId;
     }
 
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    public void setCourseModuleId(Long courseModuleId) {
+        this.courseModuleId = courseModuleId;
     }
 }
