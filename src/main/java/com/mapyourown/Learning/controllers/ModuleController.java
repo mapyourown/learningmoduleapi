@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value="/api", produces = "application/json")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://159.223.117.248:8082")
 public class ModuleController {
     @Autowired
     ModuleRepository moduleRepository;

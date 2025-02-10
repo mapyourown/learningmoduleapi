@@ -34,7 +34,7 @@ import com.mapyourown.Learning.repository.UserRepository;
 import com.mapyourown.Learning.security.jwt.JwtUtils;
 import com.mapyourown.Learning.security.services.UserDetailsImpl;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://159.223.117.248:8082")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://159.223.117.248:8082")
 public class LessonController {
     @Autowired
     ModuleRepository moduleRepository;
