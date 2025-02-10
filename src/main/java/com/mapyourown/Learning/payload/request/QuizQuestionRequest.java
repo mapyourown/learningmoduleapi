@@ -13,6 +13,7 @@ public class QuizQuestionRequest {
     @NotBlank
     private String questionTitle;
 
+    private int questionType;
     private Long quizId;
 
     public String getQuestionTitle() {
@@ -29,6 +30,14 @@ public class QuizQuestionRequest {
 
     public void setQuizId(Long quizId) {
         this.quizId = quizId;
+    }
+
+    public int getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(int questionType) {
+        this.questionType = questionType;
     }
 
 

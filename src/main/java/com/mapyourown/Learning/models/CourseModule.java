@@ -31,7 +31,10 @@ public class CourseModule {
 
 
     @OneToMany(mappedBy = "courseModule")
-    private List<Lesson> lessons = new ArrayList<>();;
+    private List<Lesson> lessons = new ArrayList<>();
+
+    @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Quiz> quizList = new ArrayList<>();
 
     public CourseModule(){
 
@@ -75,6 +78,17 @@ public class CourseModule {
         this.lessons = lessons;
         for (Lesson l: lessons){
             l.setCourseModule(this);
+        }
+    }
+
+    public List<Quiz> getQuizList() {
+        return quizList;
+    }
+
+    public void setQuizList(List<Quiz> quizList) {
+        this.quizList = quizList;
+        for (Quiz q : quizList){
+            q.setCourseModule(this);
         }
     }
 

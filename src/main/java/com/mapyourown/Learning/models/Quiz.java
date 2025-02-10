@@ -31,11 +31,10 @@ public class Quiz {
     @Column(name = "is_pass_required")
     private boolean isPassRequired;
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id")
-    private Course course;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_module_id")
+    private CourseModule courseModule;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuizQuestion> quizQuestions = new ArrayList<>();
 
@@ -47,13 +46,13 @@ public class Quiz {
         return Id;
     }
 
-    public Quiz(String name, Long number, Long courseOrder, Long minPassScore, boolean isPassRequired, Course course  ){
+    public Quiz(String name, Long number, Long courseOrder, Long minPassScore, boolean isPassRequired, CourseModule courseModule  ){
         this.name = name;
         this.number = number;
         this.courseOrder = courseOrder;
         this.minPassScore = minPassScore;
         this.isPassRequired = isPassRequired;
-        this.course = course;
+        this.courseModule = courseModule;
     }
     public Quiz(){}
 
@@ -101,12 +100,12 @@ public class Quiz {
         isPassRequired = passRequired;
     }
 
-    public Course getCourse() {
-        return course;
+    public CourseModule getCourseModule() {
+        return courseModule;
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public void setCourseModule(CourseModule courseModule) {
+        this.courseModule = courseModule;
     }
 
     public List<QuizQuestion> getQuizQuestions() {

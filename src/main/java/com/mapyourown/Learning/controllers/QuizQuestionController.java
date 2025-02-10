@@ -29,9 +29,9 @@ public class QuizQuestionController {
     public ResponseEntity<?> createQuiz(@Valid @RequestBody QuizQuestionRequest quizQuestionRequest) {
         try {
             //fetch quiz
-            Quiz quiz = quizRepository.getReferenceById( quizQuestionRequest.getQuizId());
+            Quiz quiz = quizRepository.getReferenceById(quizQuestionRequest.getQuizId());
 
-            QuizQuestion quizQuestion = new QuizQuestion(quizQuestionRequest.getQuestionTitle(), quiz);
+            QuizQuestion quizQuestion = new QuizQuestion(quizQuestionRequest.getQuestionTitle(), quizQuestionRequest.getQuestionType(), quiz);
             QuizQuestion _newQuizQuestion= quizQuestionRepository.save(quizQuestion);
             return new ResponseEntity<>(_newQuizQuestion, HttpStatus.CREATED);
         } catch (Exception e) {

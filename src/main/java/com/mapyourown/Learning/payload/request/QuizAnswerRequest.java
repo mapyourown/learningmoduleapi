@@ -24,12 +24,12 @@ public class QuizAnswerRequest {
         this.answerText = answerText;
     }
 
-    public boolean isCorrect() {
-        return isCorrect;
+    public boolean getIsCorrect() {
+        return this.isCorrect;
     }
 
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
+    public void setIsCorrect(boolean isCorrect) {
+        this.isCorrect = isCorrect;
     }
 
     public Long getQuizQuestionId() {
