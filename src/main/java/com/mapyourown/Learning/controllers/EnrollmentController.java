@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = {"https://localhost:3000", "http://localhost:3000", "http://lms.mapyourown.com:8082", "http://lms.mapyourown.com", "http://159.223.117.248:8082", "http://159.223.117.248"})
 @RequestMapping("/api")
 public class EnrollmentController {
     @Autowired
@@ -56,7 +57,7 @@ public class EnrollmentController {
             enrollmentRepository.findAll().forEach(enrollments::add);
 
             if (enrollments.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(enrollments,HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(enrollments, HttpStatus.OK);
         } catch (Exception e) {
@@ -75,7 +76,7 @@ public class EnrollmentController {
     }
     @GetMapping("/enrollment/{id}")
     public ResponseEntity<Enrollment> getEnrollmentById(@PathVariable("id") long id) {
-        Optional<Enrollment> enrollmentData = enrollmentRepository.findById(id);
+        Optional<Enrollment> enrollmentData = enrollmentRepository.findByUserId(id);
 
         if (enrollmentData.isPresent()) {
             return new ResponseEntity<>(enrollmentData.get(), HttpStatus.OK);

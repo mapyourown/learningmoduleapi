@@ -8,15 +8,20 @@ public class JwtResponse {
     private Long id;
     private String username;
     private String email;
+
+
+
+    private boolean enabled;
     private List<String> roles;
 
     private long expiredAt;
 
-    public JwtResponse(String accessToken, Long id, String username, String email, long expiredAt, List<String> roles) {
+    public JwtResponse(String accessToken, Long id, String username, String email, boolean enabled, long expiredAt, List<String> roles) {
         this.token = accessToken;
         this.id = id;
         this.username = username;
         this.email = email;
+        this.enabled = enabled;
         this.expiredAt = expiredAt;
         this.roles = roles;
     }
@@ -70,5 +75,13 @@ public class JwtResponse {
 
     public void setExpiredAt(long expiredAt) {
         this.expiredAt = expiredAt;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
