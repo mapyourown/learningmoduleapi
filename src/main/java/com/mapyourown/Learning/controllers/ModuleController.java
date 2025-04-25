@@ -20,7 +20,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value="/api", produces = "application/json")
+<<<<<<< Updated upstream
 @CrossOrigin(origins = "http://159.223.117.248:8082")
+=======
+@CrossOrigin(origins = {"https://localhost:3000", "http://localhost:3000", "http://lms.mapyourown.com:8082", "https://lms.mapyourown.com", "http://159.223.117.248:8082", "https://159.223.117.248"})
+
+>>>>>>> Stashed changes
 public class ModuleController {
     @Autowired
     ModuleRepository moduleRepository;

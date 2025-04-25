@@ -19,6 +19,10 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+<<<<<<< Updated upstream
+=======
+@CrossOrigin(origins = {"https://localhost:3000", "http://localhost:3000", "http://lms.mapyourown.com:8082", "https://lms.mapyourown.com", "http://159.223.117.248:8082", "https://159.223.117.248"})
+>>>>>>> Stashed changes
 @RequestMapping("/api")
 public class EnrollmentController {
     @Autowired
