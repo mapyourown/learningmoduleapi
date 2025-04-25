@@ -20,10 +20,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-<<<<<<< Updated upstream
-=======
 @CrossOrigin(origins = {"https://localhost:3000", "http://localhost:3000", "http://lms.mapyourown.com:8082", "https://lms.mapyourown.com", "http://159.223.117.248:8082", "https://159.223.117.248"})
->>>>>>> Stashed changes
+
 public class QuizAnswerController {
 
     @Autowired
@@ -58,7 +56,7 @@ public class QuizAnswerController {
         return new ResponseEntity<>(quizAnswers, HttpStatus.OK);
     }
 
-    @DeleteMapping("/quizAnswer/{Id}")
+    @DeleteMapping("/quizAnswer/{id}")
     public ResponseEntity<HttpStatus> deleteCourseModule(@PathVariable("id") Long id ){
         try {
             quizAnswerRepository.deleteById(id);
