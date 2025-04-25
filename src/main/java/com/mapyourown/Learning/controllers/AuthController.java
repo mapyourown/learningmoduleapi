@@ -41,8 +41,7 @@ import com.mapyourown.Learning.security.jwt.JwtUtils;
 import com.mapyourown.Learning.security.services.UserDetailsImpl;
 import java.util.UUID;
 
-@CrossOrigin(origins = {"https://localhost:3000", "http://localhost:3000", "http://lms.mapyourown.com:8082", "http://lms.mapyourown.com", "http://159.223.117.248:8082", "http://159.223.117.248"})
-
+@CrossOrigin(origins = {"https://localhost:3000", "http://localhost:3000", "http://lms.mapyourown.com:8082", "https://lms.mapyourown.com", "http://159.223.117.248:8082", "https://159.223.117.248"})
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -160,7 +159,7 @@ public class AuthController {
         user.setVerificationToken(token);
         userRepository.save(user);
 
-        String confirmationUrl = "http://localhost:3000/verify-email/" + token;
+        String confirmationUrl = "https://lms.mapyourown.com/verify-email/" + token;
         emailService.sendEmail(user.getEmail(), "Email Verification", "Click the link to verify your email: " + confirmationUrl);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
