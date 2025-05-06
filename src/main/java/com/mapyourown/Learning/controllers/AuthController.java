@@ -1,5 +1,7 @@
 package com.mapyourown.Learning.controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,6 +42,8 @@ import com.mapyourown.Learning.repository.UserRepository;
 import com.mapyourown.Learning.security.jwt.JwtUtils;
 import com.mapyourown.Learning.security.services.UserDetailsImpl;
 import java.util.UUID;
+import java.time.Month;
+import java.util.Locale;
 
 @CrossOrigin(origins = {"https://localhost:3000", "http://localhost:3000", "http://lms.mapyourown.com:8082", "https://lms.mapyourown.com", "http://159.223.117.248:8082", "https://159.223.117.248"})
 @RestController
@@ -117,9 +121,24 @@ public class AuthController {
         }
 
         // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()), signUpRequest.getFirstName(), signUpRequest.getLastName(), signUpRequest.getAddress(), signUpRequest.getCity(), signUpRequest.getState());
+        User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
+                encoder.encode(signUpRequest.getPassword()), signUpRequest.getFirstName(), signUpRequest.getLastName(), signUpRequest.getAddress(), signUpRequest.getCity(),
+                signUpRequest.getState(), signUpRequest.getDay(), signUpRequest.getMonth(), signUpRequest.getYear(),
+                signUpRequest.getPhoneNumber(), signUpRequest.isAgreed());
+        Month month;
+        try {
+            month = Month.valueOf(signUpRequest.getMonth().toUpperCase(Locale.ENGLISH));
+            //String dob =month.getValue() + "-" + signUpRequest.getDay() + '-' + signUpRequest.getYear();
+            String dob = String.format("%02d-%02d-%04d", month.getValue(), Integer.parseInt(signUpRequest.getDay()), Integer.parseInt(signUpRequest.getYear()));
+            SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+            Date date = formatter.parse(dob);
+            user.setDateOfBirth(date);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid month name: " + signUpRequest.getMonth(), e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
         user.setEnabled(false);
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
