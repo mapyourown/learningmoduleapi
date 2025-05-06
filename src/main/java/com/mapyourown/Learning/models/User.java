@@ -1,9 +1,12 @@
 package com.mapyourown.Learning.models;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -20,6 +23,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private LocalDateTime createdDateTime = LocalDateTime.now();
 
     @NotBlank
     @Size(max = 20)
@@ -43,6 +48,14 @@ public class User {
     private String state;
     private String city;
 
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="MM-dd-yyyy")
+    private Date dateOfBirth;
+    private boolean agreed;
+    private String day;
+    private String month;
+    private String year;
+    private String phoneNumber;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(  name = "user_roles",
@@ -57,7 +70,8 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String password, String firstName, String lastName, String address, String city, String state ) {
+    public User(String username, String email, String password, String firstName, String lastName, String address, String city, String state
+    , String day, String month, String year, String phoneNumber, boolean agreed ) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -66,6 +80,11 @@ public class User {
         this.address = address;
         this.city = city;
         this.state = state;
+        this.day = day;
+        this.month = month;
+        this.year = year;
+        this.phoneNumber = phoneNumber;
+        this.agreed = agreed;
     }
 
     // getters and setters
@@ -161,6 +180,59 @@ public class User {
 
     public void setCity(String city) {
         this.city = city;
+    }
+    public boolean isAgreed() {
+        return agreed;
+    }
+
+    public void setAgreed(boolean agreed) {
+        this.agreed = agreed;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
     }
 }
 
